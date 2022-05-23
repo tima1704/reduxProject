@@ -1,17 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
 import './index.css';
+import { createStore, compose, applyMiddleware } from 'redux';
+import { createRoot } from 'react-dom/client';
+import { RootReducer } from './redux/RootReducer';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk'
+const container = document.getElementById('root');
+const store = createStore(RootReducer, compose(
+     applyMiddleware(
+          thunk
+     ),
+     window.__REDUX_DEVTOOLS_EXTENSION__
+     ? window.__REDUX_DEVTOOLS_EXTENSION__()
+     : f => f
+));
+const root = createRoot(container);
+root.render(<Provider store={store}> <App/> </Provider>);
